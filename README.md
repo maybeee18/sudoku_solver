@@ -11,3 +11,6 @@ TODO List:
 - Refactoring
 - CI/CD Process?
 - Use task management software to better track TODO list?
+- Improve documentation of README file to include scope of project and how users will test it
+- Include example case for users to easily learn how to apply this program
+
