@@ -6,10 +6,10 @@ Created on Wed Mar 20 16:59:23 2019
 @author: matthewgray
 """
 
-import unittest
+import os, sys, unittest
+sys.path.append(os.path.abspath('..'))
 
-#from SudokuSolving import solveSudoku
-from . import SudokuSolver
+from solver import SudokuSolver
 
 class TestSudokuSolver(unittest.TestCase):
     
