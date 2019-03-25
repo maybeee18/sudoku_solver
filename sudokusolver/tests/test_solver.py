@@ -8,7 +8,8 @@ Created on Wed Mar 20 16:59:23 2019
 
 import unittest
 
-from SudokuSolving import solveSudoku
+#from SudokuSolving import solveSudoku
+from . import *
 
 class TestSudokuSolver(unittest.TestCase):
     
