@@ -9,9 +9,12 @@ Created on Wed Mar 20 16:59:23 2019
 import unittest
 
 #from SudokuSolving import solveSudoku
-from . import *
+from . import SudokuSolver
 
 class TestSudokuSolver(unittest.TestCase):
+    
+    def setUp(self):
+        self.sudokuSolver = SudokuSolver()
     
     def test_easy_puzzle(self):
         
@@ -37,7 +40,7 @@ class TestSudokuSolver(unittest.TestCase):
                        [7, 2, 3, 4, 8, 1, 5, 6, 9],
                        [8, 6, 1, 9, 5, 7, 4, 2, 3]]
         
-        output_result = solveSudoku(input_case)
+        output_result = self.sudokuSolver.solveSudoku(input_case)
         
         self.assertEqual(output_result, output_case)
         
@@ -66,7 +69,7 @@ class TestSudokuSolver(unittest.TestCase):
                        [6, 8, 2, 7, 3, 1, 4, 9, 5],
                        [3, 4, 9, 6, 5, 2, 8, 7, 1]]
         
-        output_result = solveSudoku(input_case)
+        output_result = self.sudokuSolver.solveSudoku(input_case)
         
         self.assertEqual(output_result, output_case)
         
@@ -75,7 +78,7 @@ class TestSudokuSolver(unittest.TestCase):
         
         input_case = [[1,1,2],[2,1,3],[1,3,2]]
         
-        output_result = solveSudoku(input_case)
+        output_result = self.sudokuSolver.solveSudoku(input_case)
         
         self.assertFalse(output_result)
         
@@ -83,7 +86,7 @@ class TestSudokuSolver(unittest.TestCase):
         
         input_case = 4
         
-        output_result = solveSudoku(input_case)
+        output_result = self.sudokuSolver.solveSudoku(input_case)
         
         self.assertFalse(output_result)
         
@@ -99,7 +102,7 @@ class TestSudokuSolver(unittest.TestCase):
                       [7, 0, 3, 4, 0, 0, 5, 6, 0],
                       [0, 0, 0, 0, 0, 0, 0, 0, 0]]
         
-        output_result = solveSudoku(input_case)
+        output_result = self.sudokuSolver.solveSudoku(input_case)
         
         self.assertFalse(output_result)
 
