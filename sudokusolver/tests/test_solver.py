@@ -9,7 +9,7 @@ Created on Wed Mar 20 16:59:23 2019
 import os, sys, unittest
 sys.path.append(os.path.abspath('..'))
 
-from solver import SudokuSolver
+from . import SudokuSolver
 
 # XMLrunner used to tie into Jenkins unit testing
 import xmlrunner
