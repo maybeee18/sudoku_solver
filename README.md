@@ -14,3 +14,5 @@ TODO List:
 - Improve documentation of README file to include scope of project and how users will test it
 - Include example case for users to easily learn how to apply this program
 - Code quality control process in place? Pull Requests? Other?
+- docs folder in main directory
+- examples folder in main directory
