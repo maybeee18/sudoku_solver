@@ -11,6 +11,9 @@ sys.path.append(os.path.abspath('..'))
 
 from solver import SudokuSolver
 
+# XMLrunner used to tie into Jenkins unit testing
+import xmlrunner
+
 class TestSudokuSolver(unittest.TestCase):
     
     def setUp(self):
@@ -107,7 +110,10 @@ class TestSudokuSolver(unittest.TestCase):
         self.assertFalse(output_result)
 
 if __name__ == '__main__':
-    unittest.main()
+    unittest.main(testRunner=xmlrunner.XMLTestRunner(output='test-reports'),
+        failfast=False,
+        buffer=False,
+        catchbreak=False)
 
 
 
