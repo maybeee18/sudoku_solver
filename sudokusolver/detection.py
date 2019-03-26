@@ -12,6 +12,8 @@ from PIL import Image
 
 # TODO: Convert all transformations to methods of a class object
 
+# TODO: opencv-python==3.4.5.20 required for drawKeypoints command
+
 # Load image in Grayscale
 img_path = 'tests/newspaper_image.jpg'
 img = cv2.imread(img_path, 0) # 0 Signifies grayscale (No RGB Values)
@@ -42,11 +44,30 @@ dilate_kernel = np.array([[0, 1, 0],
                           [0, 1, 0]], dtype='uint8')
 dilated_img = cv2.dilate(inverted_img, dilate_kernel)
 
-Image.fromarray(dilated_img)
+# Detect blobs via contours in image
+im2, contours, hierarchy = cv2.findContours(dilated_img, mode=cv2.RETR_TREE, method=cv2.CHAIN_APPROX_SIMPLE)
+
+# Hack to pick out the 4 best bounding points of the sudoku board
+biggest = None
+max_area = 0
+for i in contours:
+        area = cv2.contourArea(i)
+        if area > 100:
+                peri = cv2.arcLength(i,True)
+                approx = cv2.approxPolyDP(i,0.02*peri,True)
+                if area > max_area and len(approx)==4:
+                        biggest = approx
+                        max_area = area
+
+# Show the bounding polygon overtop the dilated image
+Image.fromarray(cv2.polylines(dilated_img, [biggest], True, (125,125,125), 5))
 
 
 
 
+
+
+#cv2.drawMatches()
 
 
 
@@ -74,7 +95,7 @@ Image.fromarray(threshold_img)
 
 Image.fromarray(inverted_img)
 
-visualized_image = Image.fromarray(img)
+Image.fromarray(dilated_img)
 
 
 
