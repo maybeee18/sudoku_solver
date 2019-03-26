@@ -9,6 +9,7 @@ Created on Tue Mar 26 09:30:35 2019
 import cv2
 import numpy as np
 from PIL import Image
+from scipy.spatial import distance as dist
 
 # TODO: Convert all transformations to methods of a class object
 
@@ -59,29 +60,56 @@ for i in contours:
                         biggest = approx
                         max_area = area
 
-# Show the bounding polygon overtop the dilated image
-Image.fromarray(cv2.polylines(dilated_img, [biggest], True, (125,125,125), 5))
+## Show the bounding polygon overtop the dilated image
+#Image.fromarray(cv2.polylines(dilated_img, [biggest], True, (125,125,125), 5))
+    
+ 
+# Reorder the polygon coordinates in proper order for warping tranformation
+def order_points(pts):
+	# sort the points based on their x-coordinates
+	xSorted = pts[np.argsort(pts[:, 0]), :]
+ 
+	# grab the left-most and right-most points from the sorted
+	# x-roodinate points
+	leftMost = xSorted[:2, :]
+	rightMost = xSorted[2:, :]
+ 
+	# now, sort the left-most coordinates according to their
+	# y-coordinates so we can grab the top-left and bottom-left
+	# points, respectively
+	leftMost = leftMost[np.argsort(leftMost[:, 1]), :]
+	(tl, bl) = leftMost
+ 
+	# now that we have the top-left coordinate, use it as an
+	# anchor to calculate the Euclidean distance between the
+	# top-left and right-most points; by the Pythagorean
+	# theorem, the point with the largest distance will be
+	# our bottom-right point
+	D = dist.cdist(tl[np.newaxis], rightMost, "euclidean")[0]
+	(br, tr) = rightMost[np.argsort(D)[::-1], :]
+ 
+	# return the coordinates in top-left, top-right,
+	# bottom-right, and bottom-left order
+	return np.array([tl, tr, bl, br], dtype="float32")    
+    
+    
+# Compute a perspective transformation to straighten the image
+image_size = 500    
+
+pts1 = np.array([order_points(np.squeeze(biggest))])
+pts2 = np.float32([[0,0],[image_size,0],[0,image_size],[image_size,image_size]])
+
+new_perspective = cv2.getPerspectiveTransform(pts1, pts2)
+
+warped_img = cv2.warpPerspective(dilated_img, new_perspective, (image_size, image_size))
 
 
 
 
 
 
-#cv2.drawMatches()
 
 
-
-## Gaussian threshold test for sample case
-#test_img = np.array([[190,160,120, 75, 50],
-#                     [170,150,100, 40, 30],
-#                     [140,130,200, 80, 20],
-#                     [120, 90, 50, 20, 10],
-#                     [100, 70, 35, 10,  5]], dtype='uint8')
-#
-#
-#threshold_img = cv2.adaptiveThreshold(test_img, 255,
-#                                      cv2.ADAPTIVE_THRESH_GAUSSIAN_C,
-#                                      cv2.THRESH_BINARY, 5, 2)
 
 
 """
@@ -97,6 +125,7 @@ Image.fromarray(inverted_img)
 
 Image.fromarray(dilated_img)
 
+Image.fromarray(warped_img)
 
 
 
