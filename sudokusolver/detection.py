@@ -26,7 +26,7 @@ blur_img = cv2.blur(img, blur_kernel_size)
 # Thresholding the image
 # Adaptive thresholding works well in various illumination settings
 max_pixel_value = 255
-block_size_for_adaptive_threshold = 5
+block_size_for_adaptive_threshold = 11
 threshold_subtraction_constant = 2
 
 threshold_img = cv2.adaptiveThreshold(blur_img, max_pixel_value,
@@ -62,6 +62,9 @@ for i in contours:
 
 ## Show the bounding polygon overtop the dilated image
 #Image.fromarray(cv2.polylines(dilated_img, [biggest], True, (125,125,125), 5))
+    
+                
+    
     
  
 # Reorder the polygon coordinates in proper order for warping tranformation
@@ -103,8 +106,33 @@ new_perspective = cv2.getPerspectiveTransform(pts1, pts2)
 
 warped_img = cv2.warpPerspective(dilated_img, new_perspective, (image_size, image_size))
 
+# Extract individual digits
+img_shape = warped_img.shape
 
+# Loop to pull individual images
+x_shift = image_size/9
+y_shift = image_size/9
 
+# TODO: Create condition to store digits for adding to test accuracy
+digit_index = 0
+for x_digit in np.arange(9):
+    for y_digit in np.arange(9):
+        
+        x_lower = int(x_shift*x_digit)
+        x_upper = int(x_shift*(x_digit+1))
+        
+        y_lower = int(y_shift*y_digit)
+        y_upper = int(y_shift*(y_digit+1))
+        
+        digit_img = warped_img[y_lower:y_upper, x_lower:x_upper]
+        
+        # Debug line, print out all digits for test accuracy
+        Image.fromarray(digit_img).save("digit-" + str(digit_index) + ".png")
+        digit_index = digit_index + 1
+        
+        #Image.fromarray(digit_img)
+        #print(str(x_digit) + ', ' + str(y_digit))
+        
 
 
 
