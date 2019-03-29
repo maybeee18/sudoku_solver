@@ -116,12 +116,12 @@ class SudokuDetector():
         # Create blank list to store rows
         output_array = []
         
-        for x_digit in np.arange(9):
+        for y_digit in np.arange(9):
             
             # Create list to store columns
             column_digits = []
             
-            for y_digit in np.arange(9):
+            for x_digit in np.arange(9):
                 
                 x_lower = int(x_shift*x_digit)
                 x_upper = int(x_shift*(x_digit+1))

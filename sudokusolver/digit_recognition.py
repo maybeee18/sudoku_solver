@@ -39,9 +39,9 @@ class DigitRecognizer():
         
         cropped_img = self._crop_image(img)
         
-        num_black_inner_pixels = sum(sum(cropped_img>(255/2)))
+        num_white_inner_pixels = sum(sum(cropped_img<(255/2)))
         
-        if num_black_inner_pixels > 250:
+        if num_white_inner_pixels > 400:
             return True
         else:
             return False
@@ -76,4 +76,8 @@ class DigitRecognizer():
 
 if __name__ == '__main__':
     recognizer = DigitRecognizer()
+    
+    import sys
+    np.set_printoptions(threshold=sys.maxsize)
+    
     print(recognizer.recognize_board(board))
