@@ -11,6 +11,7 @@ from PIL import Image
 import numpy as np
 import pandas as pd
 import PIL.ImageOps
+import cv2
 
 # Load model
 model = load_model("cnn_digit_recognition.h5")
@@ -37,18 +38,30 @@ df['black_pixels'] = df['label'].apply(lambda x: is_zero(x))
 
 test = df[['image_path', 'black_pixels']]
 
-
+filepath = 'C:\\Users\\blamp\\Desktop\\AIML\\sudoku_solver\\sudokusolver\\models\\test_accuracy\\digit-15.png'
 def load_image(filepath):
     # Convert to black for markings
     #img = PIL.ImageOps.invert(Image.open(filepath))
     img = Image.open(filepath)
     
+#    # Cut some of the border
+#    w, h = img.size
+#    img = img.crop((10,7,w-10,h-7))
+
+    # Erode image to suit MNIST style
+    erode_kernel = np.array([[0, 1, 0],
+                             [1, 1, 1],
+                             [0, 1, 0]], dtype='uint8')
+    
+    eroded = cv2.erode(np.array(img), erode_kernel, iterations=3)
+    #Image.fromarray(eroded)
+    img = Image.fromarray(eroded)
     
     # Resize to get proper size
     img = img.resize((28,28))
     
     img = np.array(img)
-#    
+    
 #    # Crop out the middle 28x28 region
 #    img = img[14:(14+28), 14:(14+28)]
     

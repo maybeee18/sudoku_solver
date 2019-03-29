@@ -16,7 +16,8 @@ from scipy.spatial import distance as dist
 # TODO: opencv-python==3.4.5.20 required for drawKeypoints command
 
 # Load image in Grayscale
-img_path = 'tests/newspaper_image.jpg'
+#img_path = 'tests/newspaper_image.jpg'
+img_path = 'tests/ideal_image.jpg'
 img = cv2.imread(img_path, 0) # 0 Signifies grayscale (No RGB Values)
 
 # Gaussian blur to smooth out the noise
@@ -43,6 +44,7 @@ inverted_img = cv2.bitwise_not(threshold_img)
 dilate_kernel = np.array([[0, 1, 0],
                           [1, 1, 1],
                           [0, 1, 0]], dtype='uint8')
+
 dilated_img = cv2.dilate(inverted_img, dilate_kernel)
 
 # Detect blobs via contours in image
