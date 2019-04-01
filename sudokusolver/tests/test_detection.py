@@ -7,10 +7,11 @@ Created on Tue Mar 26 09:30:50 2019
 """
 
 import os, sys, unittest
-sys.path.append(os.path.abspath('..'))
+#sys.path.append(os.path.abspath('..'))
 sys.path.append(os.path.abspath('sudokusolver'))
 
 from detection_class import SudokuDetector
+from digit_recognition import DigitRecognizer
 
 # XMLrunner used to tie into Jenkins unit testing
 import xmlrunner
@@ -18,7 +19,9 @@ import xmlrunner
 class TestSudokuDetection(unittest.TestCase):
     
     def setUp(self):
+        model_path = 'sudokusolver/models/cnn_digit_recognition.h5'
         self.sudokuDetector = SudokuDetector()
+        self.digitRecognizer = DigitRecognizer(model_path=model_path)
     
 #    def test_newspaper_image(self):
 #        
@@ -44,7 +47,7 @@ class TestSudokuDetection(unittest.TestCase):
         
         # Test ideal online screenshot
         
-        input_filepath = 'tests/ideal_image.jpg'
+        input_filepath = 'sudokusolver/tests/ideal_image.jpg'
         
         output_case = [[0, 0, 0, 0, 0, 8, 0, 0, 0],
                        [7, 0, 0, 4, 0, 0, 6, 8, 0],
@@ -56,7 +59,8 @@ class TestSudokuDetection(unittest.TestCase):
                        [0, 5, 1, 0, 0, 2, 0, 0, 0],
                        [9, 0, 0, 0, 5, 0, 8, 7, 0]]
         
-        output_result = self.sudokuDetector.detect_board(input_filepath)
+        board_extract = self.sudokuDetector.detect_board(input_filepath)
+        output_result = self.digitRecognizer.recognize_board(board_extract)
         
         self.assertEqual(output_result, output_case)
         

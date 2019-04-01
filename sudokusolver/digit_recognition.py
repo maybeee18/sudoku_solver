@@ -72,7 +72,8 @@ class DigitRecognizer():
             for y_index, column in enumerate(row):
                 recognized_board[x_index, y_index] = self.recognize_digit(column)
                 
-        return recognized_board
+        # Output format should be list of list for solver algorithm
+        return recognized_board.tolist()
 
 if __name__ == '__main__':
     recognizer = DigitRecognizer()
